@@ -1,20 +1,17 @@
-@*
- * This template takes a single argument, a String containing a
- * message to display.
- *@
-@(message: String)
+@(category: Form[CreateCategoryForm])(implicit request: MessagesRequestHeader)
+    @import helper._
 
-@*
- * Call the `main` template with two arguments. The first
- * argument is a `String` with the title of the page, the second
- * argument is an `Html` object containing the body of the page.
- *@
-@main("Welcome to Play") {
+    @request.flash.get("success").map { key =>
+        @request.messages(key)
+    }
 
-    @*
-     * Get an `Html` object by calling the built-in Play welcome
-     * template and passing a `String` message.
-     *@
-    @welcome(message, style = "scala")
+    @main("Welcome to Play") {
+        @form(routes.CategoryController.addCategory()) {
+            @inputText(category("name"))
+            @CSRF.formField
 
-}
+            <div class="buttons">
+                <input type="submit" value="Add Category"/>
+            </div>
+        }
+    }

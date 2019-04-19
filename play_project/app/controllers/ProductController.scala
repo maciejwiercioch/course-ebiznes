@@ -1,7 +1,7 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.{AbstractController, ControllerComponents}
+import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 
 @Singleton
 class ProductController @Inject()(cc: ControllerComponents) extends AbstractController(cc){
