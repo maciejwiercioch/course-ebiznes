@@ -4,7 +4,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import slick.jdbc.JdbcProfile
 import scala.concurrent.{ Future, ExecutionContext }
 /**
-  * A repository for people.
+  * A repository for category.
   *
   * @param dbConfigProvider The Play db config provider. Play will inject this for you.
   */
@@ -41,8 +41,8 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
   /**
     * Create a person with the given name and age.
     *
-    * This is an asynchronous operation, it will return a future of the created person, which can be used to obtain the
-    * id for that person.
+    * This is an asynchronous operation, it will return a future of the created category, which can be used to obtain the
+    * id for that category.
     */
   def create(name: String): Future[Category] = db.run {
     // We create a projection of just the name and age columns, since we're not inserting a value for the id column
@@ -56,7 +56,7 @@ class CategoryRepository @Inject() (dbConfigProvider: DatabaseConfigProvider)(im
       ) += (name)
   }
   /**
-    * List all the people in the database.
+    * List all the categories in the database.
     */
   def list(): Future[Seq[Category]] = db.run {
     category.result

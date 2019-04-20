@@ -2,15 +2,6 @@
 
 -- !Ups
 
-CREATE TABLE `People`
-(
-  `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  `age`  int NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
-);
-
 CREATE TABLE `Category`
 (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -37,8 +28,8 @@ CREATE TABLE `User`
   `id` bigint NOT NULL AUTO_INCREMENT,
   `email` varchar(500) NOT NULL,
   `password` varchar(500) NOT NULL,
-  `lastname` varchar(45)  NOT NULL,
   `firstname` varchar(45)  NOT NULL,
+  `lastname` varchar(45)  NOT NULL,
   `phone` varchar(20)  DEFAULT NULL,
   `country` varchar(20)  DEFAULT NULL,
   `city` varchar(100) DEFAULT NULL,
@@ -50,7 +41,7 @@ CREATE TABLE `User`
 CREATE TABLE `Order`
 (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `userId` bigint NOT NULL,
+  `userID` bigint NOT NULL,
   `address` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_Order_User_idx` (`userID`),

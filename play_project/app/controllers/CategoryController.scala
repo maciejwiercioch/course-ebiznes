@@ -29,8 +29,8 @@ class CategoryController @Inject()(categoryRepo: CategoryRepository, cc: Message
     * A REST endpoint that gets all the categories as JSON.
     */
   def getCategories = Action.async { implicit request =>
-    categoryRepo.list().map { people =>
-      Ok(Json.toJson(people))
+    categoryRepo.list().map { category =>
+      Ok(Json.toJson(category))
     }
   }
 
@@ -42,7 +42,8 @@ class CategoryController @Inject()(categoryRepo: CategoryRepository, cc: Message
     * The index action.
     */
   def index = Action { implicit request =>
-    Ok(views.html.index(categoryForm))
+    //Ok(views.html.index(categoryForm))
+    Ok("index category")
   }
 
   def addCategory() = Action.async { implicit request =>
@@ -52,13 +53,13 @@ class CategoryController @Inject()(categoryRepo: CategoryRepository, cc: Message
       // We also wrap the result in a successful future, since this action is synchronous, but we're required to return
       // a future because the person creation function returns a future.
       errorForm => {
-        Future.successful(Ok(views.html.index(errorForm)))
+        Future.successful(Ok("index category"))
       },
       // There were no errors in the from, so create the person.
       category => {
         categoryRepo.create(category.name).map { _ =>
           // If successful, we simply redirect to the index page.
-          Redirect(routes.CategoryController.index).flashing("success" -> "category_created")
+          Redirect(routes.ProductController.index).flashing("success" -> "category_created")
         }
       }
     )

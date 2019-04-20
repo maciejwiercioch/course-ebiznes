@@ -4,18 +4,17 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.CategoryController.index
-# An example controller showing how to use dependency injection
-GET     /count                      controllers.CountController.count
-# An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
-
-# Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET     /                           controllers.ProductController.index
+# An example controller showing a sample home page
+#GET     /product                    controllers.ProductController.index
 
 
 # USER CONTROLLER paths
 #*************************************************************************************#
+# Get user form
+GET     /user                       controllers.UserController.index
+# Get all users
+GET     /getUsers                   controllers.UserController.getUsers
 # Get user by id
 GET     /user/:id                   controllers.UserController.getUserById(id)
 # Create new user
@@ -28,22 +27,27 @@ PUT     /user/:id                   controllers.UserController.updateUserById(id
 
 # PRODUCT CONTROLLER paths
 #*************************************************************************************#
+# Get all products
+GET     /getProducts                controllers.ProductController.getProducts
 # Get product by id
 GET     /product/:id                controllers.ProductController.getProductById(id)
 # Create new product
-POST    /product                    controllers.ProductController.addProduct
++nocsrf
+POST    /addProduct                 controllers.ProductController.addProduct
 # Delete product by id
 DELETE  /product/:id                controllers.ProductController.deleteProductById(id)
 # Update product by id
-PUT     /product/:id                   controllers.ProductController.updateProductById(id)
+PUT     /product/:id                controllers.ProductController.updateProductById(id)
 
 # CATEGORY CONTROLLER paths
 #*************************************************************************************#
+# Get all categories
+GET     /getCategories              controllers.CategoryController.getCategories
 # Get category by id
 GET     /category/:id               controllers.CategoryController.getCategoryById(id)
-GET     /getCategories              controllers.CategoryController.getCategories
 # Create new category
-POST    /category                   controllers.CategoryController.addCategory
++nocsrf
+POST    /addCategory                controllers.CategoryController.addCategory
 # Delete category by id
 DELETE  /category/:id               controllers.CategoryController.deleteCategoryById(id)
 # Update category by id
@@ -66,14 +70,15 @@ PUT     /orderdetail/:id            controllers.OrderDetailController.updateOrde
 # ORDER CONTROLLER paths
 #*************************************************************************************#
 # Get order by id
-GET     /order/:id            controllers.OrderController.getOrderById(id)
+GET     /order/:id                  controllers.OrderController.getOrderById(id)
 # Create new detail
-POST    /order                controllers.OrderController.addOrder
+POST    /order                      controllers.OrderController.addOrder
 # Delete order by id
-DELETE  /order/:id            controllers.OrderController.deleteOrderById(id)
+DELETE  /order/:id                  controllers.OrderController.deleteOrderById(id)
 # Update order by id
-PUT     /order/:id            controllers.OrderController.updateOrderById(id)
+PUT     /order/:id                  controllers.OrderController.updateOrderById(id)
 
-
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
 
       
