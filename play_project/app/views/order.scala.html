@@ -1,0 +1,19 @@
+@(order: Form[CreateOrderForm], user: Seq[User])(implicit request: MessagesRequestHeader)
+@import helper._
+@request.flash.get("success").map { key =>
+    @request.messages(key)
+}
+@main("Add Order Form") {
+    @form(routes.OrderController.addOrder()) {
+        <select name="user" id="user">
+        @for(us <- user){
+            <option value="@us.id">@us.email</option>
+        }
+        </select>
+        <br/>
+        @inputText(order("address"))
+        <div class="buttons">
+            <input type="submit" value="Add Order"/>
+        </div>
+    }
+}

@@ -42,20 +42,17 @@ class CategoryController @Inject()(categoryRepo: CategoryRepository, cc: Message
     * The index action.
     */
   def index = Action { implicit request =>
-    //Ok(views.html.index(categoryForm))
-    Ok("index category")
+     Ok(views.html.category(categoryForm))
   }
 
   def addCategory() = Action.async { implicit request =>
-    // Bind the form first, then fold the result, passing a function to handle errors, and a function to handle succes.
+
     categoryForm.bindFromRequest.fold(
-      // The error function. We return the index page with the error form, which will render the errors.
-      // We also wrap the result in a successful future, since this action is synchronous, but we're required to return
-      // a future because the person creation function returns a future.
+
       errorForm => {
         Future.successful(Ok("index category"))
       },
-      // There were no errors in the from, so create the person.
+
       category => {
         categoryRepo.create(category.name).map { _ =>
           // If successful, we simply redirect to the index page.

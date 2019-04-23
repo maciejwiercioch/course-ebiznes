@@ -5,8 +5,6 @@
 
 # An example controller showing a sample home page
 GET     /                           controllers.ProductController.index
-# An example controller showing a sample home page
-#GET     /product                    controllers.ProductController.index
 
 
 # USER CONTROLLER paths
@@ -18,6 +16,7 @@ GET     /getUsers                   controllers.UserController.getUsers
 # Get user by id
 GET     /user/:id                   controllers.UserController.getUserById(id)
 # Create new user
++nocsrf
 POST    /user                       controllers.UserController.addUser
 # Delete user by id
 DELETE  /user/:id                   controllers.UserController.deleteUser(id)
@@ -27,6 +26,8 @@ PUT     /user/:id                   controllers.UserController.updateUserById(id
 
 # PRODUCT CONTROLLER paths
 #*************************************************************************************#
+# Get product form
+GET     /product                    controllers.ProductController.index
 # Get all products
 GET     /getProducts                controllers.ProductController.getProducts
 # Get product by id
@@ -41,6 +42,8 @@ PUT     /product/:id                controllers.ProductController.updateProductB
 
 # CATEGORY CONTROLLER paths
 #*************************************************************************************#
+# Get order detail form
+GET     /category                   controllers.CategoryController.index
 # Get all categories
 GET     /getCategories              controllers.CategoryController.getCategories
 # Get category by id
@@ -56,9 +59,14 @@ PUT     /category/:id               controllers.CategoryController.updateCategor
 
 # ORDERDETAIL CONTROLLER paths
 #*************************************************************************************#
+# Get order detail form
+GET     /orderdetail                controllers.OrderDetailController.index
+# Get all order detail
+GET     /getOrderDetail             controllers.OrderDetailController.getOrderDetails
 # Get order detail by id
 GET     /orderdetail/:id            controllers.OrderDetailController.getOrderDetailById(id)
 # Create new order detail
++nocsrf
 POST    /orderdetail                controllers.OrderDetailController.addOrderDetail
 # Delete order detail by id
 DELETE  /orderdetail/:id            controllers.OrderDetailController.deleteOrderDetailById(id)
@@ -69,9 +77,14 @@ PUT     /orderdetail/:id            controllers.OrderDetailController.updateOrde
 
 # ORDER CONTROLLER paths
 #*************************************************************************************#
+# Get user form
+GET     /order                      controllers.OrderController.index
+# Get all categories
+GET     /getOrders                  controllers.OrderController.getOrders
 # Get order by id
 GET     /order/:id                  controllers.OrderController.getOrderById(id)
 # Create new detail
++nocsrf
 POST    /order                      controllers.OrderController.addOrder
 # Delete order by id
 DELETE  /order/:id                  controllers.OrderController.deleteOrderById(id)

@@ -3,7 +3,7 @@
 @request.flash.get("success").map { key =>
     @request.messages(key)
 }
-@main("Welcome to Ebiznes") {
+@main("Add Product Form") {
     @form(routes.ProductController.addProduct()) {
         @inputText(product("name"))
         @inputText(product("price"))

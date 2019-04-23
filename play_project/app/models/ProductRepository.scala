@@ -12,15 +12,15 @@ import scala.concurrent.{ExecutionContext, Future}
   * @param dbConfigProvider The Play db config provider. Play will inject this for you.
   */
 @Singleton
-class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, categoryRepository: CategoryRepository)(implicit ec: ExecutionContext){
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
+class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, val categoryRepository: CategoryRepository)(implicit ec: ExecutionContext){
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
   import categoryRepository.CategoryTable
 
-  private class ProductTable(tag: Tag) extends Table[Product](tag, "Product"){
+  class ProductTable(tag: Tag) extends Table[Product](tag, "Product"){
 
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
@@ -40,7 +40,7 @@ class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, cat
   private val cat = TableQuery[CategoryTable]
 
   def create(name: String, price: Float, categoryID: Int, description: String) : Future[Product] = db.run {
-    (product.map(p => (p.name,p.price, p.categoryID, p.description))
+    (product.map(p => (p.name, p.price, p.categoryID, p.description))
       returning product.map(_.id)
       // And we define a transformation for the returned value, which combines our original parameters with the
       // returned id

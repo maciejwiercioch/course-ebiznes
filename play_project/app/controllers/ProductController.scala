@@ -44,7 +44,7 @@ class ProductController @Inject()(productRepo: ProductRepository, categoryRepo: 
   def addProduct() = Action.async { implicit request =>
     var a:Seq[Category] = Seq[Category]()
     val categories = categoryRepo.list().onComplete{
-      case Success(cat) => a= cat
+      case Success(cat) => a = cat
       case Failure(_) => print("fail")
     }
     // Bind the form first, then fold the result, passing a function to handle errors, and a function to handle succes.

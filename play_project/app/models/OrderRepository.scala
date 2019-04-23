@@ -12,15 +12,15 @@ import scala.concurrent.{ExecutionContext, Future}
   * @param dbConfigProvider The Play db config provider. Play will inject this for you.
   */
 @Singleton
-class OrderRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, userRepository: UserRepository)(implicit ec: ExecutionContext){
-  private val dbConfig = dbConfigProvider.get[JdbcProfile]
+class OrderRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, val userRepository: UserRepository)(implicit ec: ExecutionContext){
+  val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig._
   import profile.api._
 
   import userRepository.UserTable
 
-  private class OrderTable(tag: Tag) extends Table[Order](tag, "Order"){
+  class OrderTable(tag: Tag) extends Table[Order](tag, "Order"){
 
     def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
     def userID = column[Int]("userID")
@@ -32,8 +32,8 @@ class OrderRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, userR
     def * = (id, userID, address) <> ((Order.apply _).tupled, Order.unapply)
   }
 
-  private val order = TableQuery[OrderTable]
-  private val user = TableQuery[UserTable]
+  val order = TableQuery[OrderTable]
+  val user = TableQuery[UserTable]
 
   def create(userID: Int, address: String) : Future[Order] = db.run {
     (order.map(o => (o.userID, o.address))

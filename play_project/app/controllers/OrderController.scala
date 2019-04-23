@@ -1,17 +1,71 @@
 package controllers
-
-import javax.inject.{Inject, Singleton}
-import play.api.mvc.{AbstractController, ControllerComponents}
+import javax.inject._
+import models._
+import play.api.data.Form
+import play.api.data.Forms._
+import play.api.data.format.Formats._
+import play.api.data.validation.Constraints._
+import play.api.i18n._
+import play.api.libs.json.Json
+import play.api.mvc._
+import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 @Singleton
-class OrderController @Inject()(cc: ControllerComponents) extends AbstractController(cc){
+class OrderController @Inject()(orderRepo: OrderRepository, userRepo: UserRepository, cc: MessagesControllerComponents
+                                 )(implicit ec: ExecutionContext)
+  extends MessagesAbstractController(cc) {
+
+
+
+  /**
+    * The mapping for the product form.
+    */
+  val orderForm: Form[CreateOrderForm] = Form {
+    mapping(
+      "user" -> number,
+      "address" -> nonEmptyText
+    )(CreateOrderForm.apply)(CreateOrderForm.unapply)
+  }
+
+  def index = Action.async { implicit request =>
+    val users = userRepo.list()
+    users.map(user => Ok(views.html.order(orderForm,user)))
+  }
+
+  def getOrders() = Action.async {
+    implicit request =>
+      orderRepo.list().map { order =>
+        Ok(Json.toJson(order))
+      }
+  }
+
+  def addOrder() = Action.async { implicit request =>
+
+    var a:Seq[User] = Seq[User]()
+    val users = userRepo.list().onComplete{
+      case Success(user) => a= user
+      case Failure(_) => print("fail")
+    }
+
+    orderForm.bindFromRequest.fold(
+
+      errorForm => {
+        Future.successful(Ok(views.html.order(errorForm, a)))
+      },
+
+      order => {
+        orderRepo.create(order.userID, order.address).map { _ =>
+          // If successful, we simply redirect to the index page.
+          Redirect(routes.OrderController.index).flashing("success" -> "order created")
+        }
+      }
+    )
+  }
+
 
   def getOrderById(id : String) = Action {
     Ok("return order, id:" + id)
-  }
-
-  def addOrder() = Action {
-    Ok("add order")
   }
 
   def deleteOrderById(id : String) = Action {
@@ -19,6 +73,8 @@ class OrderController @Inject()(cc: ControllerComponents) extends AbstractContro
   }
 
   def updateOrderById(id: String) = Action{
-    Ok("update order, order id" + id)
+    Ok("update order, product id" + id)
   }
 }
+
+case class CreateOrderForm(userID: Int, address: String)

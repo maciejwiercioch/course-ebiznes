@@ -1,0 +1,24 @@
+@(orderDetail: Form[CreateOrderDetailForm],order: Seq[Order], product: Seq[Product])(implicit request: MessagesRequestHeader)
+@import helper._
+@request.flash.get("success").map { key =>
+    @request.messages(key)
+}
+@main("Add Order Detail Form") {
+    @form(routes.OrderDetailController.addOrderDetail()) {
+        <select name="order" id="order">
+        @for(o <- order){
+            <option value="@o.id">@o.address</option>
+        }
+        </select>
+        <br/>
+        <select name="product" id="order">
+        @for(p <- product){
+            <option value="@p.id">@p.name</option>
+        }
+        </select>
+        @inputText(orderDetail("quantity"))
+        <div class="buttons">
+            <input type="submit" value="Add Order Detail"/>
+        </div>
+    }
+}
