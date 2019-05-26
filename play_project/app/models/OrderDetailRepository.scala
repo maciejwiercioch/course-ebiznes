@@ -7,7 +7,7 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.{ExecutionContext, Future}
 
 /**
-  * A repository for product.
+  * A repository for order detail.
   *
   * @param dbConfigProvider The Play db config provider. Play will inject this for you.
   */
@@ -43,15 +43,13 @@ class OrderDetailRepository @Inject() (dbConfigProvider: DatabaseConfigProvider,
   def create(orderID: Int, productID : Int,quantity: Int) : Future[OrderDetail] = db.run {
     (orderDetail.map(o => (o.orderID, o.productID, o.quantity))
       returning orderDetail.map(_.id)
-      // And we define a transformation for the returned value, which combines our original parameters with the
-      // returned id
       into {case ((orderID, productID, quantity),id) => OrderDetail(id, orderID, productID, quantity)}
       // And finally, insert the person into the database
       ) += (orderID, productID, quantity)
   }
 
   /**
-    * List all the people in the database.
+    * List all the order details in the database.
     */
   def list(): Future[Seq[OrderDetail]] = db.run {
     orderDetail.result

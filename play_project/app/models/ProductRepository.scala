@@ -2,6 +2,7 @@ package models
 
 import javax.inject.{Inject, Singleton}
 import play.api.db.slick.DatabaseConfigProvider
+import play.api.libs.json.Json
 import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -50,11 +51,18 @@ class ProductRepository @Inject() (dbConfigProvider: DatabaseConfigProvider, val
   }
 
   /**
-    * List all the people in the database.
+    * List all the products in the database.
     */
   def list(): Future[Seq[Product]] = db.run {
     product.result
   }
+
+  def getWithCategories() : Future[Seq[ProductWithCategory]] = db.run {
+    product.join(cat).on(_.categoryID === _.id).map{
+      case (prod, category) =>  (prod.id, prod.name, prod.price, category.name, prod.description) <> ((ProductWithCategory.apply _).tupled, ProductWithCategory.unapply)
+    }.result
+  }
+
   def getByCategory(category_id: Int): Future[Seq[Product]] = db.run {
     product.filter(_.categoryID === category_id).result
   }

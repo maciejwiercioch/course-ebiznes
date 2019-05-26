@@ -10,6 +10,7 @@ import play.api.libs.json.Json
 import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
+import play.api.Logger
 
 @Singleton
 class ProductController @Inject()(productRepo: ProductRepository, categoryRepo: CategoryRepository, cc: MessagesControllerComponents
@@ -41,13 +42,21 @@ class ProductController @Inject()(productRepo: ProductRepository, categoryRepo: 
       }
   }
 
+  def getProductsWithCategories() = Action.async {
+    implicit request =>
+      productRepo.getWithCategories().map { productWithCat =>
+        Ok(Json.toJson(productWithCat))
+      }
+  }
+  val logger: Logger = Logger(this.getClass())
   def addProduct() = Action.async { implicit request =>
     var a:Seq[Category] = Seq[Category]()
     val categories = categoryRepo.list().onComplete{
       case Success(cat) => a = cat
       case Failure(_) => print("fail")
     }
-    // Bind the form first, then fold the result, passing a function to handle errors, and a function to handle succes.
+
+     //Bind the form first, then fold the result, passing a function to handle errors, and a function to handle succes.
     productForm.bindFromRequest.fold(
       // The error function. We return the index page with the error form, which will render the errors.
       // We also wrap the result in a successful future, since this action is synchronous, but we're required to return
@@ -55,7 +64,6 @@ class ProductController @Inject()(productRepo: ProductRepository, categoryRepo: 
       errorForm => {
         Future.successful(Ok(views.html.index(errorForm, a)))
       },
-      // There were no errors in the from, so create the person.
       product => {
         productRepo.create(product.name, product.price, product.categoryID, product.description).map { _ =>
           // If successful, we simply redirect to the index page.
@@ -63,7 +71,7 @@ class ProductController @Inject()(productRepo: ProductRepository, categoryRepo: 
         }
       }
     )
-  }
+}
 
 
   def getProductById(id : String) = Action {

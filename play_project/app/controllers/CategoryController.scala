@@ -34,8 +34,10 @@ class CategoryController @Inject()(categoryRepo: CategoryRepository, cc: Message
     }
   }
 
-  def getCategoryById(id : String) = Action {
-    Ok("return category, id:" + id)
+  def getCategoryById(id : String) = Action.async { implicit request =>
+    categoryRepo.getById(id.toInt).map {
+      category => Ok(Json.toJson(category))
+    }
   }
 
   /**

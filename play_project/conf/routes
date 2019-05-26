@@ -16,8 +16,7 @@ GET     /getUsers                   controllers.UserController.getUsers
 # Get user by id
 GET     /user/:id                   controllers.UserController.getUserById(id)
 # Create new user
-+nocsrf
-POST    /user                       controllers.UserController.addUser
+POST    /addUser                    controllers.UserController.addUser
 # Delete user by id
 DELETE  /user/:id                   controllers.UserController.deleteUser(id)
 # Update user by id
@@ -29,11 +28,10 @@ PUT     /user/:id                   controllers.UserController.updateUserById(id
 # Get product form
 GET     /product                    controllers.ProductController.index
 # Get all products
-GET     /getProducts                controllers.ProductController.getProducts
+GET     /getProducts                controllers.ProductController.getProductsWithCategories
 # Get product by id
 GET     /product/:id                controllers.ProductController.getProductById(id)
 # Create new product
-+nocsrf
 POST    /addProduct                 controllers.ProductController.addProduct
 # Delete product by id
 DELETE  /product/:id                controllers.ProductController.deleteProductById(id)
@@ -42,14 +40,13 @@ PUT     /product/:id                controllers.ProductController.updateProductB
 
 # CATEGORY CONTROLLER paths
 #*************************************************************************************#
-# Get order detail form
+# Get category form
 GET     /category                   controllers.CategoryController.index
 # Get all categories
 GET     /getCategories              controllers.CategoryController.getCategories
 # Get category by id
 GET     /category/:id               controllers.CategoryController.getCategoryById(id)
 # Create new category
-+nocsrf
 POST    /addCategory                controllers.CategoryController.addCategory
 # Delete category by id
 DELETE  /category/:id               controllers.CategoryController.deleteCategoryById(id)
@@ -62,12 +59,11 @@ PUT     /category/:id               controllers.CategoryController.updateCategor
 # Get order detail form
 GET     /orderdetail                controllers.OrderDetailController.index
 # Get all order detail
-GET     /getOrderDetail             controllers.OrderDetailController.getOrderDetails
+GET     /getOrderDetails            controllers.OrderDetailController.getOrderDetails
 # Get order detail by id
 GET     /orderdetail/:id            controllers.OrderDetailController.getOrderDetailById(id)
 # Create new order detail
-+nocsrf
-POST    /orderdetail                controllers.OrderDetailController.addOrderDetail
+POST    /addOrderDetail             controllers.OrderDetailController.addOrderDetail
 # Delete order detail by id
 DELETE  /orderdetail/:id            controllers.OrderDetailController.deleteOrderDetailById(id)
 # Update order detail by id
@@ -84,8 +80,7 @@ GET     /getOrders                  controllers.OrderController.getOrders
 # Get order by id
 GET     /order/:id                  controllers.OrderController.getOrderById(id)
 # Create new detail
-+nocsrf
-POST    /order                      controllers.OrderController.addOrder
+POST    /addOrder                   controllers.OrderController.addOrder
 # Delete order by id
 DELETE  /order/:id                  controllers.OrderController.deleteOrderById(id)
 # Update order by id

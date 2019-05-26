@@ -8,7 +8,6 @@
 @main("Add category form.") {
     @form(routes.CategoryController.addCategory()) {
         @inputText(category("name"))
-        @CSRF.formField
 
         <div class="buttons">
             <input type="submit" value="Add Category"/>
