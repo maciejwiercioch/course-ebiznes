@@ -61,13 +61,12 @@ class OrderDetailController @Inject()(orderDetailRepository: OrderDetailReposito
     orderDetailForm.bindFromRequest.fold(
 
       errorForm => {
-        Future.successful(Ok(views.html.orderdetail(errorForm, a, b)))
+        Future.successful(BadRequest("order details form contains errors"))
       },
 
       orderDetail => {
-        orderDetailRepository.create(orderDetail.orderID, orderDetail.productID, orderDetail.quantity).map { _ =>
-          // If successful, we simply redirect to the index page.
-          Redirect(routes.OrderDetailController.index).flashing("success" -> "order detail created")
+        orderDetailRepository.create(orderDetail.orderID, orderDetail.productID, orderDetail.quantity).map { orderDetail =>
+          Created(Json.toJson(orderDetail))
         }
       }
     )

@@ -52,13 +52,12 @@ class CategoryController @Inject()(categoryRepo: CategoryRepository, cc: Message
     categoryForm.bindFromRequest.fold(
 
       errorForm => {
-        Future.successful(Ok("index category"))
+        Future.successful(BadRequest("category form contains errors"))
       },
 
       category => {
-        categoryRepo.create(category.name).map { _ =>
-          // If successful, we simply redirect to the index page.
-          Redirect(routes.ProductController.index).flashing("success" -> "category_created")
+        categoryRepo.create(category.name).map { category =>
+          Created(Json.toJson(category))
         }
       }
     )

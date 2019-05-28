@@ -56,18 +56,13 @@ class ProductController @Inject()(productRepo: ProductRepository, categoryRepo: 
       case Failure(_) => print("fail")
     }
 
-     //Bind the form first, then fold the result, passing a function to handle errors, and a function to handle succes.
     productForm.bindFromRequest.fold(
-      // The error function. We return the index page with the error form, which will render the errors.
-      // We also wrap the result in a successful future, since this action is synchronous, but we're required to return
-      // a future because the person creation function returns a future.
       errorForm => {
-        Future.successful(Ok(views.html.index(errorForm, a)))
+        Future.successful(BadRequest("product form contains errors"))
       },
       product => {
-        productRepo.create(product.name, product.price, product.categoryID, product.description).map { _ =>
-          // If successful, we simply redirect to the index page.
-          Redirect(routes.ProductController.index).flashing("success" -> "product created")
+        productRepo.create(product.name, product.price, product.categoryID, product.description).map { product =>
+          Created(Json.toJson(product))
         }
       }
     )

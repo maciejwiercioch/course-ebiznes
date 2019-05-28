@@ -44,13 +44,11 @@ class UserController @Inject()(userRepo: UserRepository, cc: MessagesControllerC
     userForm.bindFromRequest.fold(
 
       errorForm => {
-        Future.successful(Ok("index user"))
+        Future.successful(BadRequest("user form contains errors"))
       },
-
       user => {
-        userRepo.create(user.email, user.password, user.firstname, user.lastname, user.phone, user.city, user.country, user.address).map { _ =>
-
-          Redirect(routes.ProductController.index).flashing("success" -> "user_created")
+        userRepo.create(user.email, user.password, user.firstname, user.lastname, user.phone, user.city, user.country, user.address).map { user =>
+          Created(Json.toJson(user))
         }
       }
     )

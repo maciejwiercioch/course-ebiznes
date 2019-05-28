@@ -48,13 +48,12 @@ class OrderController @Inject()(orderRepo: OrderRepository, userRepo: UserReposi
     orderForm.bindFromRequest.fold(
 
       errorForm => {
-        Future.successful(Ok(views.html.order(errorForm, a)))
+        Future.successful(BadRequest("product form contains errors"))
       },
 
       order => {
-        orderRepo.create(order.userID, order.address).map { _ =>
-          // If successful, we simply redirect to the index page.
-          Redirect(routes.OrderController.index).flashing("success" -> "order created")
+        orderRepo.create(order.userID, order.address).map { order =>
+          Created(Json.toJson(order))
         }
       }
     )
